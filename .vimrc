@@ -1,217 +1,339 @@
-filetype off
-""" pathogen をコメントアウト
-" call pathogen#runtime_append_all_bundles()
-" call pathogen#helptags()
-" set helpfile=$VIMRUNTIME/doc/help.txt
- 
-""" Vundle '''
-set rtp+=~/.vim/vundle/
-call vundle#rc()
-filetype plugin on
- 
-" 利用中のプラグインをBundle
-Bundle 'Shougo/neocomplcache'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'tpope/vim-surround'
-Bundle 'thinca/vim-ref'
-Bundle 'kana/vim-fakeclip'
-Bundle "mrtazz/simplenote.vim"
-Bundle 'motemen/hatena-vim'
-Bundle "TwitVim"
-Bundle "quickrun.vim"
-Bundle "mattn/hahhah-vim"
-Bundle "motemen/git-vim"
-Bundle "scrooloose/nerdtree"
-Bundle "tpope/vim-rails"
-Bundle "koron/u-nya-vim"
-Bundle "SingleCompile"
+" neobundle
+set nocompatible               " Be iMproved
+filetype off                   " Required!
+if has('vim_starting')
+  set runtimepath+=~/.vim/neobundle.vim
+  set runtimepath+=~/.vim/bundle/vundle/
+  call neobundle#rc(expand('~/.vim/bundle'))
+endif
 
+"call vundle#rc()
+" color cheme
+NeoBundle 'tomasr/molokai.git'
+NeoBundle 'sickill/vim-monokai'
 
+NeoBundle 'Shougo/neocomplcache.git'
+NeoBundle 'Shougo/neosnippet.git'
+NeoBundle 'Shougo/unite.vim.git'
+NeoBundle 'Shougo/vimshell.git'
+NeoBundle 'majutsushi/tagbar'
+NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'szw/vim-tags'
+NeoBundle 'vim-scripts/errormarker.vim.git'
+NeoBundle 'wincent/Command-T'
+NeoBundle 'nanotech/jellybeans.vim'
+NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'gmarik/vundle'
+NeoBundle 'basyura/bitly.vim.git'
+NeoBundle 'basyura/TweetVim.git'
+NeoBundle 'basyura/twibill.vim.git'
+NeoBundle 'h1mesuke/unite-outline.git'
+NeoBundle 'mattn/webapi-vim.git'
+NeoBundle 'tyru/open-browser.vim.git'
+NeoBundle 'yomi322/neco-tweetvim.git'
+NeoBundle 'yomi322/unite-tweetvim.git'
+NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'kana/vim-smartchr'
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'nelstrom/vim-textobj-rubyblock'
 
-"日本語入力設定
-set imsearch=0
-set iminsert=0
-set encoding=utf-8
-set fileencodings=utf-8,cp932,euc-jp,iso-2022-jp,ucs-2,latin1
-set fileformats=unix,dos,mac
+" Git関連
+NeoBundle 'tpope/vim-fugitive.git'
+NeoBundle 'gregsexton/gitv.git'
 
-"挿入モードでのバックスペースの設定
-set backspace=indent,eol
+" Ruby開発用プラギン
+NeoBundle 'tpope/vim-rails'
+NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'tpope/vim-cucumber'
+NeoBundle 'scrooloose/nerdcommenter'
 
-" ========== 表示設定 ==========
-:set t_Co=256 " 256 colors
-:set background=dark
-":color grb256
-"カラースキーマを設定
-"colorscheme neon
-colorscheme torte
-"hilight
-syntax on
-"行番号を表示する
-set number
-"閉じ括弧が入力されたとき、対応する括弧を表示する
+" PlayFramerowk用 plugin
+NeoBundle 'gre/play2vim'
+NeoBundle 'derekwyatt/vim-scala'
+NeoBundle 'othree/html5.vim'
+
+filetype plugin indent on     " Required!
+"   Installation check.
+if neobundle#exists_not_installed_bundles()
+  echomsg 'Not installed bundles : ' .
+        \ string(neobundle#get_not_installed_bundle_names())
+  echomsg 'Please execute ":NeoBundleInstall" command.'
+endif
+" augroup init (from tyru's vimrc)
+augroup vimrc
+    autocmd!
+augroup END
+
+command!
+\ -bang -nargs=*
+\ MyAutocmd
+\ autocmd<bang> vimrc <args>
+
+"basic Setting
+" display
 set showmatch
-"ステータスラインを常に表示
+set number
+set ruler
+set cursorline
+set statusline=2
 set laststatus=2
-"ステータスライン表示設定
-set statusline=%<%f\ %m%r%h%w%y%{'\ \
-\/'.(&fenc!=''?&fenc:&enc).'\/'.&ff.'\/'}%=%l,%c%V%8P
-"ステータスラインにハァハァハァ
-"set statusline=%=%{g:HahHah()}
-"set statusline=%<%f\ %h%m%r%=%{g:U_nya_()}
-
-" ========== インデント設定 ==========
-
-"新しい行のインデントを現在行と同じにする
-set autoindent
-"タブの代わりに空白文字を挿入する
-set expandtab
-"シフト移動幅
-set shiftwidth=2
-"行頭の余白内で Tab を打ち込むと、'shiftwidth' の数だけインデントする
-set smarttab
-"ファイル内の <Tab> が対応する空白の数
-set tabstop=2
-"新しい行を作ったときに高度な自動インデントを行う
+" indent
 set smartindent
+set autoindent
+set tabstop=2
+set shiftwidth=2
+set expandtab
+" etc
+set bs=indent,eol,start
+set smartcase
+set history=100
+set nobackup
+set noswapfile
+set display=uhex
+set autoread
 
-" ========== ファイル保存設定 ==========
+" 編集中の行に下線を引く
+MyAutocmd InsertLeave * setlocal nocursorline
+MyAutocmd InsertEnter * setlocal cursorline
+MyAutocmd InsertLeave * highlight StatusLine ctermfg = 145 guifg = #c2bfa5 guibg = #000000
+MyAutocmd InsertEnter * highlight StatusLine ctermfg = 12 guifg = #1E90FF
 
-"スワップファイル＆バックアップファイルを作るディレクトリ
-set backupdir=$HOME/vimbackup
-set directory=$HOME/vimbackup
-"ファイル保存ダイアログの初期ディレクトリをバッファファイル位置に設定
-set browsedir=buffer 
-"変更中のファイルでも、保存しないで他のファイルを表示
-set hidden
+syntax on
 
-" ========== yank設定 ==========
+set encoding=utf-8
+set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
+"set fileformats=unix,dos,mac
+if has('guess_encode')
+    set fileencodings=guess
+else
+    set fileencodings=ucs_bom,utf8,ucs-2le,ucs-2
+      " from ずんWiki http://www.kawaz.jp/pukiwiki/?vim#content_1_7
+      " 文字コードの自動認識
+      if &encoding !=# 'utf-8'
+          set encoding=japan
+          set fileencoding=japan
+      endif
 
-"クリップボードをOSと連携
-set clipboard=unnamed
+      if has('iconv')
+          let s:enc_euc = 'euc-jp'
+          let s:enc_jis = 'iso-2022-jp'
+          " iconvがeucJP-msに対応しているかをチェック
+          if iconv("\x87\x64\x87\x6a",'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
+              let s:enc_euc = 'eucjp-ms'
+              let s:enc_jis = 'iso-2022-jp-3'
 
-" ========== search設定 ==========
+              " iconvがJISX0213に対応しているかをチェック
+          elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
+              let s:enc_euc = 'euc-jisx0213'
+              let s:enc_jis = 'iso-2022-jp-3'
+          endif
 
-"インクリメンタルサーチを行う
-set incsearch
-"マッチした文字列をハイライト
-set hlsearch
-"検索時に大文字を含んでいたら大/小を区別
-set ignorecase smartcase
+          " fileencodingsを構築
+          if &encoding  ==# 'utf-8'
+              let s:fileencodings_default = &fileencodings
+              let &fileencodings = s:enc_jis .','.  s:enc_euc .',cp932'
+              let &fileencodings = s:fileencodings_default .','.  &fileencodings
+              unlet s:fileencodings_default
+          else
+              let &fileencodings = &fileencodings .','.  s:enc_jis
+              set fileencodings+=utf-8,ucs-2le,ucs-2
+              if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
+                  set fileencodings+=cp932
+                  set fileencodings-=euc-jp
+                  set fileencodings-=euc-jisx0213
+                  set fileencodings-=eucjp-ms
+                  let &encoding = s:enc_euc
+                  let &fileencoding = s:enc_euc
+              else
+                  let &fileencodings = &fileencodings .','.  s:enc_euc
+              endif
+          endif
 
-" ========== grep設定 ==========
+          " 定数を処分
+          unlet s:enc_euc
+          unlet s:enc_jis
+      endif
+  " }}}
+endif
 
-" vimgrep時に自動でQuickFixを開く設定
-au QuickfixCmdPost vimgrep cw
+" colorschehme
+"colorscheme jellybeans
+colorscheme monokai
+"colorscheme molokai
+"let g:molokai_original=1
+"let g:rehash256 = 1
+set background=dark
 
-" ========== move設定 ==========
+" neocomplcache
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_dictionary_filetype_lists = {
+    \ 'default' : '',
+    \ 'scala' : $HOME . '/.vim/dict/scala.dict',
+    \ }
 
-"カーソルを行頭、行末で止まらないようにする
-set whichwrap=b,s,h,l,<,>,[,]
+" filetype autocmd
+autocmd BufNewFile,BufRead *.java set filetype=java
+autocmd BufNewFile,BufRead *.scala set filetype=scala
+autocmd BufNewFile,BufRead *.sbt set filetype=scala
+autocmd BufNewFile,BufRead *.gradle set filetype=groovy
 
-" ========== Align設定 ==========
-
-" Alignを日本語環境で使用するための設定
-let g:Align_xstrlen = 3
-
-" ========== その他設定 ==========
-
-"for yankring
-set viminfo+=!
-
-" for MRU
-let MRU_Max_Entries=50
-
-" ========== マルチバイトを使ううえで ==========
-
-" 記号文字の表示がおかしくならないように
-set ambiwidth=double
-
-" ========== include ==========
-
-source $HOME/vimfiles/keymap.vim
-source $HOME/vimfiles/functions.vim
-source $HOME/vimfiles/addft.vim
-
-" ========== onCreate ==========
-
-
-
-let g:SimplenoteUsername = "naopi.chan@gmail.com"
-let g:SimplenotePassword = "naopi001"
-
-let twitvim_login = "naopi:naopi001"
-let twitvim_count = 100
-
-"===== 2012.07.16 add
-" NeoBundle がインストールされていない時、
-" もしくは、プラグインの初期化に失敗した時の処理
-function! s:WithoutBundles()
-  colorscheme desert
-  " その他の処理
+" smartchr {{{
+function! s:EnableSmartchrBasic()
+    inoremap <buffer><expr> + smartchr#one_of(' + ', '+', '++')
+    inoremap <buffer><expr> & smartchr#one_of(' & ', ' && ', '&')
+    inoremap <buffer><expr> , smartchr#one_of(', ', ',')
+    inoremap <buffer><expr> <Bar> smartchr#one_of('<Bar>', ' <Bar><Bar> ', '<Bar><Bar>')
+    inoremap <buffer><expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= ' : search('\(\*\<bar>!\)\%#')? '= ' : smartchr#one_of(' = ', ' == ', '=')
 endfunction
 
-" NeoBundle よるプラグインのロードと各プラグインの初期化
-function! s:LoadBundles()
-  " 読み込むプラグインの指定
-  NeoBundle 'Shougo/neobundle.vim'
-  NeoBundle 'tpope/vim-surround'
-  " ...
-  " 読み込んだプラグインの設定
-  " ...
+function! s:EnableSmartchrRegExp()
+    inoremap <buffer><expr> ~ search('\(!\<bar>=\) \%#', 'bcn')? '<bs>~ ' : '~'
 endfunction
 
-" NeoBundle がインストールされているなら LoadBundles() を呼び出す
-" そうでないなら WithoutBundles() を呼び出す
-function! s:InitNeoBundle()
-  if isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
-    filetype plugin indent off
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
-    try
-      call neobundle#rc(expand('~/.vim/bundle/'))
-      call s:LoadBundles()
-    catch
-      call s:WithoutBundles()
-    endtry 
-  else
-    call s:WithoutBundles()
-  endif
-
-  filetype indent plugin on
-  syntax on
+function! s:EnableSmartchrRubyHash()
+    inoremap <buffer><expr> > smartchr#one_of('>', ' => ')
 endfunction
 
-call s:InitNeoBundle()
+function! s:EnableSmartchrHaml()
+    call s:EnableSmartchrRubyHash()
+    inoremap <buffer> [ []<Esc>i
+    inoremap <buffer> { {}<Esc>i
+endfunction
 
-" solarized カラースキーム
-  NeoBundle 'altercation/vim-colors-solarized'
-" mustang カラースキーム
-  NeoBundle 'croaker/mustang-vim'
-" wombat カラースキーム
-  NeoBundle 'jeffreyiacono/vim-colors-wombat'
-" jellybeans カラースキーム
-  NeoBundle 'nanotech/jellybeans.vim'
-" lucius カラースキーム
-  NeoBundle 'vim-scripts/Lucius'
-" zenburn カラースキーム
-  NeoBundle 'vim-scripts/Zenburn'
-" mrkn256 カラースキーム
-  NeoBundle 'mrkn/mrkn256.vim'
-" railscasts カラースキーム
-  NeoBundle 'jpo/vim-railscasts-theme'
-" pyte カラースキーム
-  NeoBundle 'therubymug/vim-pyte'
-" molokai カラースキーム
-  NeoBundle 'tomasr/molokai'
+function! s:EnableSmartchrCoffeeFunction()
+    inoremap <buffer><expr> > smartchr#one_of('>', ' ->')
+endfunction
 
-" カラースキーム一覧表示に Unite.vim を使う
-  NeoBundle 'Shougo/unite.vim'
-  NeoBundle 'ujihisa/unite-colorscheme'
-" insert modeで開始
-let g:unite_enable_start_insert=1
- 
-" buffer 一覧
-noremap <c-o> :<c-u>Unite buffer -direction=botright <cr>
- 
-" file 一覧
-noremap <c-i> :<c-u>UniteWithBufferDir -buffer-name=files file -direction=botright <cr>
+MyAutocmd FileType c,cpp,php,python,javascript,ruby,coffee,vim call s:EnableSmartchrBasic()
+MyAutocmd FileType python,ruby,coffee,vim call s:EnableSmartchrRegExp()
+MyAutocmd FileType ruby call s:EnableSmartchrRubyHash()
+MyAutocmd FileType ruby,eruby setlocal tags+=~/rtags
+MyAutocmd FileType haml call s:EnableSmartchrHaml()
+MyAutocmd FileType coffee call s:EnableSmartchrCoffeeFunction()
+" }}}
+
+" neosnippet
+"   Plugin key-mappings.
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+
+"   SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+"   For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+let g:neosnippet#snippets_directory='~/.vim/snippets'
+
+" vimsehll
+let g:vimshell_interactive_update_time = 10
+let g:vimshell_prompt = $USER."% "
+"vimshell map
+nmap vs :VimShell<CR>
+nmap vp :VimShellPop<CR>
+
+" make
+autocmd FileType scala :compiler sbt
+autocmd QuickFixCmdPost make if len(getqflist()) != 0 | copen | endif
+
+" marker
+let g:errormarker_errortext     = '!!'
+let g:errormarker_warningtext   = '??'
+let g:errormarker_errorgroup    = 'Error'
+let g:errormarker_warninggroup  = 'ToDo'
+
+" TagBar
+nmap <F8> :TagbarToggle<CR>
+
+" NERDTree
+nmap <silent> <C-e> :NERDTreeToggle<CR>
+vmap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
+omap <silent> <C-e> :NERDTreeToggle<CR>
+imap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+let g:NERDTreeShowHidden=1
+
+" vim-tags
+nnoremap <C-]> g<C-]>
+
+" indent-guides
+let g:indent_guides_guide_size = 1
+let g:indent_guides_auto_colors = 1
+
+" .vimrcの編集起動
+nnoremap <Space>.  :<C-u>edit $MYVIMRC<Enter>
+nnoremap <Space>>  :<C-u>source $MYVIMRC<Enter>
+nnoremap <Space>,  :<C-u>edit $MYGVIMRC<Enter>
+
+" 矢印キーを封印する
+"noremap <Up>    <Nop>
+"noremap <Down>  <Nop>
+"noremap <Left>  <Nop>
+"noremap <Right> <Nop>
+
+" lightlineの設定
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [
+      \       ['mode', 'paste'],
+      \       ['readonly', 'filename', 'modified', 'anzu']
+      \   ]
+      \ },
+      \ 'component_function': {
+      \   'anzu': 'anzu#search_status'
+      \ }
+      \ }
+
+" tabline
+set showtabline=2
+command! -nargs=+ -complete=file Te tabedit <args>
+command! -nargs=* -complete=file Tn tabnew <args>
+nnoremap <silent> <S-Right> :<C-U>tabnext<CR>
+nnoremap <silent> <S-Left> :<C-U>tabprevious<CR>
+nnoremap <silent> <C-l> :<C-U>tabnext<CR>
+nnoremap <silent> <C-h> :<C-U>tabprevious<CR>
+nnoremap [tab]+     :<C-U>tabmove +1<CR>
+nnoremap [tab]-     :<C-U>tabmove -1<CR>
+
+
+" using vim for Java Programming
+set makeprg=./gradlew
+set errorformat=
+    \%-G[%\\(WARNING]%\\)%\\@!%.%#,
+    \%A%[%^[]%\\@=%f:[%l\\,%v]\ %m,
+    \%W[WARNING]\ %f:[%l\\,%v]\ %m,
+    \%-Z\ %#,
+    \%-Clocation\ %#:%.%#,
+    \%C%[%^:]%#%m,
+    \%-G%.%#
+
+" TweetVim
+let g:tweetvim_tweet_per_page = 50
+
+" F6と,uvでTweetVimのtimeline選択
+nnoremap <F6> :<C-u>Unite tweetvim<CR>
+nnoremap ,uv :<C-u>Unite tweetvim<CR>
+
+" Etc
+nnoremap ,tl :<C-u>TweetVimHomeTimeline<CR>
+nnoremap ,tm :<C-u>TweetVimMentions<CR>
+nnoremap ,ts :<C-u>TweetVimSay<CR>
+nnoremap ,tc :<C-u>TweetVimCommandSay
+
+" QuickRun
+let g:quickrun_config = {
+\ "cpp/g++": {
+\   "cmdopt":"-std=c++0x",
+\   "hook/time/enable" : 1
+\   },
+\ "_":{
+\   "outputter/buffer/split" : ":botright",
+\   "outputter/buffer/close_on_empty" : 1
+\   },
+\}
+" <C-c> で実行を強制終了させる
+" quickrun.vim が実行していない場合には <C-c> を呼び出す
+nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
