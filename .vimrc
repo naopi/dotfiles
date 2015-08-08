@@ -19,7 +19,14 @@ NeoBundle "Shougo/neosnippet-snippets"
 NeoBundle 'Shougo/neocomplcache.git'
 NeoBundle 'Shougo/unite.vim.git'
 NeoBundle 'Shougo/vimshell.git'
-NeoBundle 'Shougo/vimproc.git'
+NeoBundle 'Shougo/vimproc', {
+      \ 'build' : {
+      \     'windows' : 'make -f make_mingw32.mak',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ }
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'scrooloose/nerdtree'
@@ -63,12 +70,33 @@ NeoBundle 'kannokanno/previm'
 " Swift用
 NeoBundle 'toyamarinyon/vim-swift'
 
-" Clojure用
+" Clojure用 http://blog.ieknir.com/blog/beginning-clojure-with-vim/
 NeoBundle 'guns/vim-clojure-static'
 NeoBundle 'kien/rainbow_parentheses.vim'
 NeoBundle 'tpope/vim-fireplace'
 NeoBundle 'tpope/vim-classpath'
 
+" TypeScript用
+NeoBundle 'clausreinke/typescript-tools.git'
+NeoBundle 'leafgarland/typescript-vim.git'
+
+" Memolist
+NeoBundle 'fuenor/qfixgrep.git'
+NeoBundle 'glidenote/memolist.vim'
+
+" PureScript関連
+NeoBundle 'raichoo/purescript-vim.git'
+ 
+" Dash
+NeoBundle 'rizzatti/dash.vim'
+
+" Haskell
+NeoBundle 'dag/vim2hs'
+NeoBundle 'eagletmt/ghcmod-vim'
+NeoBundle 'eagletmt/neco-ghc'
+
+" FSharp
+NeoBundle 'fsharp/fsharpbinding'
 
 
 filetype plugin indent on     " Required!
@@ -98,6 +126,9 @@ set ruler
 set cursorline
 set statusline=2
 set laststatus=2
+set list
+set listchars=eol:¬,tab:▸\
+
 " indent
 set smartindent
 set autoindent
@@ -112,6 +143,7 @@ set nobackup
 set noswapfile
 set display=uhex
 set autoread
+set updatetime=50
 
 " 編集中の行に下線を引く
 MyAutocmd InsertLeave * setlocal nocursorline
@@ -230,6 +262,7 @@ let g:neosnippet#snippets_directory='~/.vim/snippets'
 " vimsehll
 let g:vimshell_interactive_update_time = 10
 let g:vimshell_prompt = $USER."% "
+
 "vimshell map
 nmap vs :VimShell<CR>
 nmap vp :VimShellPop<CR>
@@ -300,7 +333,7 @@ nnoremap [tab]-     :<C-U>tabmove -1<CR>
 
 
 " using vim for Java Programming
-set makeprg=./gradlew
+" set makeprg=./gradlew
 set errorformat=
     \%-G[%\\(WARNING]%\\)%\\@!%.%#,
     \%A%[%^[]%\\@=%f:[%l\\,%v]\ %m,
@@ -337,6 +370,8 @@ let g:quickrun_config = {
 " <C-c> で実行を強制終了させる
 " quickrun.vim が実行していない場合には <C-c> を呼び出す
 nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
+nnoremap <silent> \r :QuickRun -cmdopt "<CR>
+
 
 " Markdown形式のファイルを開く設定
 augroup PrevimSettings
@@ -350,4 +385,28 @@ augroup END
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
+
+" TypeScript用
+autocmd QuickFixCmdPost [^l]* nested cwindow
+autocmd QuickFixCmdPost    l* nested lwindow
+let s:system=exists('g:loaded_vimproc')?'vimproc#system_bg':'system'
+
+augroup vim-auto-typescript
+  autocmd!
+  "適当なタイミングで再読み込み
+  autocmd CursorHold *.ts:checktime
+  autocmd CursorMoved *.ts:checktime
+
+  " 書き込み時にjsに出力する
+  autocmd BufWritePost *.ts:call {system}("tsc main.js")
+augroup END
+
+
+"Memolist
+let g:memolist_qfixgrep = 1
+map <Leader>ml  :MemoList<CR>
+map <Leader>mn  :MemoNew<CR>
+map <Leader>mg  :MemoGrep<CR>
+
+" PureScript
 

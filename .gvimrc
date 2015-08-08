@@ -1,7 +1,7 @@
 " System gvimrc file for MacVim
 "
-" Maintainer:	Bjorn Winckler <bjorn.winckler@gmail.com>
-" Last Change:	Sun Aug 29 2009
+" Maintainer:  Bjorn Winckler <bjorn.winckler@gmail.com>
+" Last Change:  Sun Aug 29 2009
 "
 " This is a work in progress.  If you feel so inclined, please help me improve
 " this file.
@@ -191,8 +191,10 @@ if has('win32')
 elseif has('mac') || has('gui_macvim')
 "  set guifont=Osaka-Mono:h14
 "  set guifontwide=Osaka-Mono:h14
-  set guifont=Ricty:h16
+"  set guifont=Ricty:h16
+  set guifont=Ricty_for_Powerline:h16
   set guifontwide=Ricty:h16
+let g:Powerline_symols='fancy'
 elseif has('xfontset')
   " UNIX用 (xfontsetを使用)
   set guifontset=a14,r14,k14
@@ -223,7 +225,8 @@ set lines=45
 set cmdheight=2
 " 画面を黒地に白にする (次行の先頭の " を削除すれば有効になる)
 "colorscheme evening " (GUI使用時)
-colorscheme wombat " (GUI使用時)
+"colorscheme wombat " (GUI使用時)
+colorscheme jellybeans
 
 "---------------------------------------------------------------------------
 " 日本語入力に関する設定:
@@ -304,3 +307,10 @@ if has('printer')
 endif
 
 " Copyright (C) 2007 KaoriYa/MURAOKA Taro
+
+" MySetting
+if has('gui_macvim')
+  set showtabline=2
+  map <silent> gw :macaction selectNextWindow;
+  map <silent> gW :macaction selectPreviousWindow;
+endif
