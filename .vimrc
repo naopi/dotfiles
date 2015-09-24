@@ -1,14 +1,27 @@
-" neobundle
-set nocompatible               " Be iMproved
-filetype off                   " Required!
-if has('vim_starting')
-  set runtimepath+=~/.vim/neobundle.vim
-  set runtimepath+=~/.vim/bundle/vundle/
-  call neobundle#rc(expand('~/.vim/bundle'))
-endif
+" Note: Skip initialization for vim-tiny or vim-small.
+ if !1 | finish | endif
 
-"call vundle#rc()
-" color cheme
+ if has('vim_starting')
+   if &compatible
+     set nocompatible               " Be iMproved
+   endif
+
+   " Required:
+   set runtimepath+=~/.vim/bundle/neobundle.vim/
+ endif
+
+ " Required:
+ call neobundle#begin(expand('~/.vim/bundle/'))
+
+ " Let NeoBundle manage NeoBundle
+ " Required:
+ NeoBundleFetch 'Shougo/neobundle.vim'
+
+ " My Bundles here:
+ " Refer to |:NeoBundle-examples|.
+ " Note: You don't set neobundle setting in .gvimrc!
+
+" Color Scheme
 NeoBundle 'tomasr/molokai.git'
 NeoBundle 'sickill/vim-monokai'
 NeoBundle 'w0ng/vim-hybrid'
@@ -17,7 +30,6 @@ NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundle "Shougo/neosnippet"
 NeoBundle "Shougo/neosnippet-snippets"
 NeoBundle 'Shougo/neocomplcache.git'
-NeoBundle 'Shougo/unite.vim.git'
 NeoBundle 'Shougo/vimshell.git'
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
@@ -27,6 +39,7 @@ NeoBundle 'Shougo/vimproc', {
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ }
+
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'scrooloose/nerdtree'
@@ -49,32 +62,50 @@ NeoBundle 'kana/vim-smartchr'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'nelstrom/vim-textobj-rubyblock'
 
-" Git関連
-NeoBundle 'tpope/vim-fugitive.git'
-NeoBundle 'gregsexton/gitv.git'
+" unite {{{
+NeoBundle 'tsukkee/unite-help'
+NeoBundle 'ujihisa/unite-gem'
+NeoBundle 'Shougo/unite.vim.git'
+NeoBundle 'thinca/vim-unite-history'
+NeoBundle 'Shougo/unite-outline'
+NeoBundle 'eagletmt/unite-haddock'
+NeoBundle 'ujihisa/unite-haskellimport'
+NeoBundle 'tsukkee/unite-tag'
+NeoBundle 'rhysd/unite-ruby-require.vim'
+NeoBundle 'joker1007/unite-pull-request'
+NeoBundle 'osyo-manga/unite-quickrun_config'
+NeoBundle 'Shougo/neomru.vim'
 
-" Ruby開発用プラギン
-NeoBundle 'tpope/vim-rails'
-NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle 'tpope/vim-cucumber'
-NeoBundle 'scrooloose/nerdcommenter'
+NeoBundleLazy 'Shougo/unite.vim', {
+\   'autoload' : {
+\       'commands' : [ "Unite", "UniteWithBufferDir", "UniteWithCurrentDir" ]
+\   }
+\}
+" }}}
 
-" PlayFramerowk用 plugin
-NeoBundle 'gre/play2vim'
-NeoBundle 'derekwyatt/vim-scala'
-NeoBundle 'othree/html5.vim'
+" Git関連 {{{
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'gregsexton/gitv'
+NeoBundle 'airblade/vim-gitgutter'
 
-" Markdown用
-NeoBundle 'kannokanno/previm'
-
-" Swift用
-NeoBundle 'toyamarinyon/vim-swift'
+NeoBundleLazy 'mattn/gist-vim', {
+      \   'autoload' : {
+      \       'commands' : [ "Gist" ]
+      \   }
+      \}
+" }}}
 
 " Clojure用 http://blog.ieknir.com/blog/beginning-clojure-with-vim/
 NeoBundle 'guns/vim-clojure-static'
 NeoBundle 'kien/rainbow_parentheses.vim'
 NeoBundle 'tpope/vim-fireplace'
 NeoBundle 'tpope/vim-classpath'
+
+" JavaScript
+NeoBundle 'myhere/vim-nodejs-complete'
+NeoBundle 'pangloss/vim-javascript'
+NeoBundle 'scrooloose/syntastic'
+
 
 " TypeScript用
 NeoBundle 'clausreinke/typescript-tools.git'
@@ -84,39 +115,58 @@ NeoBundle 'leafgarland/typescript-vim.git'
 NeoBundle 'fuenor/qfixgrep.git'
 NeoBundle 'glidenote/memolist.vim'
 
-" PureScript関連
-NeoBundle 'raichoo/purescript-vim.git'
- 
-" Dash
-NeoBundle 'rizzatti/dash.vim'
-
-" Haskell
+" Haskell {{{
 NeoBundle 'dag/vim2hs'
-NeoBundle 'eagletmt/ghcmod-vim'
-NeoBundle 'eagletmt/neco-ghc'
+NeoBundle 'pbrisbin/html-template-syntax'
+NeoBundleLazy 'eagletmt/ghcmod-vim', {
+      \   'autoload' : {
+      \       'filetypes' : [ "haskell" ]
+      \   }
+      \}
 
-" FSharp
-NeoBundle 'fsharp/fsharpbinding'
+NeoBundleLazy 'ujihisa/neco-ghc', {
+      \   'autoload' : {
+      \       'filetypes' : [ "haskell" ]
+      \   }
+      \}
+" }}}
+
+" Markdown
+NeoBundle 'plasticboy/vim-markdown'
+NeoBundle 'kannokanno/previm'
+NeoBundle 'tyru/open-browser.vim'
+
+" html template {{{
+NeoBundle 'mattn/emmet-vim'
+NeoBundle 'claco/jasmine.vim'
+NeoBundle 'digitaltoad/vim-jade'
+NeoBundle 'slim-template/vim-slim'
+NeoBundle 'tpope/vim-haml'
+NeoBundle 'nono/vim-handlebars'
+NeoBundle 'juvenn/mustache.vim'
+" }}}
+
+NeoBundle 'jpalardy/vim-slime'
 
 
-filetype plugin indent on     " Required!
-"   Installation check.
-if neobundle#exists_not_installed_bundles()
-  echomsg 'Not installed bundles : ' .
-        \ string(neobundle#get_not_installed_bundle_names())
-  echomsg 'Please execute ":NeoBundleInstall" command.'
-endif
+call neobundle#end()
+
+" Required:
+filetype plugin indent on
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+
 " augroup init (from tyru's vimrc)
 augroup vimrc
-    autocmd!
+  autocmd!
 augroup END
 
 command!
-\ -bang -nargs=*
-\ MyAutocmd
-\ autocmd<bang> vimrc <args>
-
-syntax on
+  \ -bang -nargs=*
+  \ MyAutocmd
+  \ autocmd<bang> vimrc <args>
 
 "basic Setting
 " display
@@ -135,6 +185,7 @@ set autoindent
 set tabstop=2
 set shiftwidth=2
 set expandtab
+
 " etc
 set bs=indent,eol,start
 set smartcase
@@ -145,68 +196,7 @@ set display=uhex
 set autoread
 set updatetime=50
 
-" 編集中の行に下線を引く
-MyAutocmd InsertLeave * setlocal nocursorline
-MyAutocmd InsertEnter * setlocal cursorline
-MyAutocmd InsertLeave * highlight StatusLine ctermfg = 145 guifg = #c2bfa5 guibg = #000000
-MyAutocmd InsertEnter * highlight StatusLine ctermfg = 12 guifg = #1E90FF
 
-
-set encoding=utf-8
-set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
-"set fileformats=unix,dos,mac
-if has('guess_encode')
-    set fileencodings=guess
-else
-    set fileencodings=ucs_bom,utf8,ucs-2le,ucs-2
-      " from ずんWiki http://www.kawaz.jp/pukiwiki/?vim#content_1_7
-      " 文字コードの自動認識
-      if &encoding !=# 'utf-8'
-          set encoding=japan
-          set fileencoding=japan
-      endif
-
-      if has('iconv')
-          let s:enc_euc = 'euc-jp'
-          let s:enc_jis = 'iso-2022-jp'
-          " iconvがeucJP-msに対応しているかをチェック
-          if iconv("\x87\x64\x87\x6a",'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
-              let s:enc_euc = 'eucjp-ms'
-              let s:enc_jis = 'iso-2022-jp-3'
-
-              " iconvがJISX0213に対応しているかをチェック
-          elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
-              let s:enc_euc = 'euc-jisx0213'
-              let s:enc_jis = 'iso-2022-jp-3'
-          endif
-
-          " fileencodingsを構築
-          if &encoding  ==# 'utf-8'
-              let s:fileencodings_default = &fileencodings
-              let &fileencodings = s:enc_jis .','.  s:enc_euc .',cp932'
-              let &fileencodings = s:fileencodings_default .','.  &fileencodings
-              unlet s:fileencodings_default
-          else
-              let &fileencodings = &fileencodings .','.  s:enc_jis
-              set fileencodings+=utf-8,ucs-2le,ucs-2
-              if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
-                  set fileencodings+=cp932
-                  set fileencodings-=euc-jp
-                  set fileencodings-=euc-jisx0213
-                  set fileencodings-=eucjp-ms
-                  let &encoding = s:enc_euc
-                  let &fileencoding = s:enc_euc
-              else
-                  let &fileencodings = &fileencodings .','.  s:enc_euc
-              endif
-          endif
-
-          " 定数を処分
-          unlet s:enc_euc
-          unlet s:enc_jis
-      endif
-  " }}}
-endif
 
 "=====================================================================
 " Colorscheme
@@ -214,13 +204,14 @@ endif
 " {{
 " colorschehme
 if ($ft=='scala')
-  colorscheme tomorrow-Night
+  colorscheme Tomorrow-Night
 else
   colorscheme hybrid
   "colorscheme monokai
 endif
 
-colorscheme tomorrow-Night
+"colorscheme Tomorrow-Night
+colorscheme molokai
 "colorscheme hybrid
 "let g:hybrid_use_iTerm_colors = 1
   
@@ -231,6 +222,12 @@ colorscheme tomorrow-Night
 "let g:rehash256 = 1
 set background=dark
 "}}
+
+" ポップアップメニューのカラーを設定
+MyAutocmd Syntax * hi Pmenu ctermfg=15 ctermbg=18 guibg=#666666
+MyAutocmd Syntax * hi PmenuSel ctermbg=39 ctermfg=0 guibg=#8cd0d3 guifg=#666666
+MyAutocmd Syntax * hi PmenuSbar guibg=#333333
+
 
 " neocomplcache
 let g:neocomplcache_enable_at_startup = 1
@@ -244,6 +241,22 @@ autocmd BufNewFile,BufRead *.java set filetype=java
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.sbt set filetype=scala
 autocmd BufNewFile,BufRead *.gradle set filetype=groovy
+
+" バッファ切り替え {{{
+nnoremap [space]n :<C-U>bnext<CR>
+nnoremap [space]p :<C-U>bprevious<CR>
+nnoremap <Leader>1   :e #1<CR>
+nnoremap <Leader>2   :e #2<CR>
+nnoremap <Leader>3   :e #3<CR>
+nnoremap <Leader>4   :e #4<CR>
+nnoremap <Leader>5   :e #5<CR>
+nnoremap <Leader>6   :e #6<CR>
+nnoremap <Leader>7   :e #7<CR>
+nnoremap <Leader>8   :e #8<CR>
+nnoremap <Leader>9   :e #9<CR>
+" バッファ一覧
+nmap ,b :buffers<CR>
+" }}}
 
 " neosnippet
 "   Plugin key-mappings.
@@ -300,12 +313,6 @@ nnoremap <Space>.  :<C-u>edit $MYVIMRC<Enter>
 nnoremap <Space>>  :<C-u>source $MYVIMRC<Enter>
 nnoremap <Space>,  :<C-u>edit $MYGVIMRC<Enter>
 
-" 矢印キーを封印する
-"noremap <Up>    <Nop>
-"noremap <Down>  <Nop>
-"noremap <Left>  <Nop>
-"noremap <Right> <Nop>
-
 " lightlineの設定
 let g:lightline = {
       \ 'colorscheme': 'wombat',
@@ -330,7 +337,6 @@ nnoremap <silent> <C-l> :<C-U>tabnext<CR>
 nnoremap <silent> <C-h> :<C-U>tabprevious<CR>
 nnoremap [tab]+     :<C-U>tabmove +1<CR>
 nnoremap [tab]-     :<C-U>tabmove -1<CR>
-
 
 " using vim for Java Programming
 " set makeprg=./gradlew
@@ -358,27 +364,29 @@ nnoremap ,tc :<C-u>TweetVimCommandSay
 
 " QuickRun
 let g:quickrun_config = {
-\ "cpp/g++": {
-\   "cmdopt":"-std=c++0x",
-\   "hook/time/enable" : 1
-\   },
-\ "_":{
-\   "outputter/buffer/split" : ":botright",
-\   "outputter/buffer/close_on_empty" : 1
-\   },
-\}
+      \ "cpp/g++": {
+      \   "cmdopt":"-std=c++0x",
+      \   "hook/time/enable" : 1
+      \   },
+      \ "_":{
+      \   "outputter/buffer/split" : ":botright",
+      \   "outputter/buffer/close_on_empty" : 1
+      \   },
+      \}
 " <C-c> で実行を強制終了させる
 " quickrun.vim が実行していない場合には <C-c> を呼び出す
 nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
 nnoremap <silent> \r :QuickRun -cmdopt "<CR>
 
+" 水平に分割する
+let g:quickrun_config={'*': {'split': ''}}
+
 
 " Markdown形式のファイルを開く設定
 augroup PrevimSettings
-    autocmd!
-    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+  autocmd!
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 augroup END
-  
 
 " Clojure用 
 " rainbow_parentheses.vimの括弧の色付けを有効化
@@ -389,8 +397,8 @@ au Syntax * RainbowParenthesesLoadSquare
 " TypeScript用
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
-let s:system=exists('g:loaded_vimproc')?'vimproc#system_bg':'system'
 
+let s:system=exists('g:loaded_vimproc')?'vimproc#system_bg':'system'
 augroup vim-auto-typescript
   autocmd!
   "適当なタイミングで再読み込み
@@ -408,5 +416,62 @@ map <Leader>ml  :MemoList<CR>
 map <Leader>mn  :MemoNew<CR>
 map <Leader>mg  :MemoGrep<CR>
 
-" PureScript
 
+" TweetVim {{{
+nnoremap <silent> S :<C-u>TweetVimSay<CR>
+nnoremap <silent> [unite]t   :<C-u>Unite tweetvim<CR>
+nnoremap <silent> [space]ts   :<C-u>TweetVimUserStream<CR>
+nnoremap <silent> [space]tt   :<C-u>TweetVimHomeTimeline<CR>
+if neobundle#tap('TweetVim')
+  let g:tweetvim_include_rts = 1
+  if has('mac')
+    let g:tweetvim_display_icon = 0
+  else
+    let g:tweetvim_display_icon = 1
+  end
+
+  call neobundle#untap()
+endif
+" }}}
+
+" open-browser
+let g:netrw_nogx = 1 " disable netrw's gx mapping.
+nnoremap gx <Plug>(openbrowser-smart-search)
+vnoremap gx <Plug>(openbrowser-smart-search)
+function! OpenBrowserLine()
+  let matched = matchlist(getline("."), 'https\?://[0-9A-Za-z_#?~=\-+%\.\/:]\+')
+  if len(matched) == 0
+    break
+  endif
+  execute "OpenBrowser " . matched[0]
+endfunction
+
+" Haskell 
+au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
+au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
+au FileType haskell nnoremap <buffer> <silent> <F3> :HdevtoolsInfo<CR>
+let g:slime_target = "tmux"
+let g:slime_paste_file = tempname()
+
+" JavaScript
+autocmd FileType javascript setlocal omnifunc=nodejscomplete#CompleteJS
+if !exists('g:neocomplcache_omni_functions')
+  let g:neocomplcache_omni_functions = {}
+endif
+let g:neocomplcache_omni_functions.javascript = 'nodejscomplete#CompleteJS'
+
+let g:node_usejscomplete = 1
+let g:syntastic_check_on_open=0 "ファイルを開いたときはチェックしない
+let g:syntastic_check_on_save=1 "保存時にはチェック
+let g:syntastic_check_on_wq = 0 " wqではチェックしない
+let g:syntastic_auto_loc_list=1 "エラーがあったら自動でロケーションリストを開く
+let g:syntastic_loc_list_height=6 "エラー表示ウィンドウの高さ
+set statusline+=%#warningmsg# "エラーメッセージの書式
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_javascript_checkers = ['eslint'] "ESLintを使う
+let g:syntastic_mode_map = {
+      \ 'mode': 'active',
+      \ 'active_filetypes': ['javascript'],
+      \ 'passive_filetypes': []
+      \ }
